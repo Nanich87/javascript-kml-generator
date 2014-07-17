@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="bg">
+    <head>
+        <meta charset="UTF-8">
+        <title>Point2KML</title>
+		<link rel="stylesheet" href="style.css" type="text/css" />
+    </head>
+    <body>
+        <div id="container"></div>
+        <script type="text/javascript">
+            window.onload = function() {
+                var container = document.querySelector('#container');
+
+                var title = document.createElement('h1');
+                title.innerHTML = 'Генериране на KML файл от точки';
+
+                var inputContentTitle = document.createElement('h2');
+                inputContentTitle.innerHTML = 'Входни данни';
+
+                var outputContentTitle = document.createElement('h2');
+                outputContentTitle.innerHTML = 'Изходни данни';
+
+                var inputContent = document.createElement('textarea');
+                inputContent.className = 'input-content';
+
+                var outputContent = document.createElement('textarea');
+                outputContent.className = 'output-content';
+
+                var button = document.createElement('button');
+                button.className = 'submit-button';
+                button.innerHTML = 'Генериране';
+
+                function readInput() {
+                    var inputElement = container.querySelector('.input-content');
+                    var inputContent = inputElement.value;
+
+                    // console.log(inputContent);
+
+                    var items = inputContent.split("\n");
+
+                    // console.log(items);
+
+                    var points = [];
+
+                    for (var i = 0; i < items.length; i++) {
+                        var point = items[i].split(' ');
+
+                        // console.log(point);
+
+                        points.push({
+							id: point[0],
+							latitude: point[1],
+							longitude: point[2]
+						});
+                    }
+
+                    generateKML(points);
+                }
+
+                function generateKML(points) {
+                    if (points.length > 0) {
+
+                        var result = '<?xml version="1.0" encoding="UTF-8"?>\n';
+						result += '<kml xmlns="http://www.opengis.net/kml/2.2">\n';
+						result += '<Document>\n';
+
+                        for (var i = 0; i < points.length; i++) {
+
+                            result += '<Placemark>';
+							result += '<name>' + points[i].id + '</name>';
+							result += '<description></description>';
+							result += '<coordinates>' + points[i].longitude + ',' + points[i].latitude + ',0</coordinates>';
+                            result += '</Placemark>\n';
+                        }
+						
+						result += '</Document>\n';
+						result += '</kml>';
+
+                        var output = container.querySelector('.output-content');
+                        output.innerHTML = result;
+                    }
+                }
+
+                container.appendChild(title);
+                container.appendChild(inputContentTitle);
+                container.appendChild(inputContent);
+                container.appendChild(outputContentTitle);
+                container.appendChild(outputContent);
+                container.appendChild(button);
+
+                var submitButton = container.querySelector('.submit-button');
+                submitButton.addEventListener('click', readInput, false);
+            }
+        </script>
+    </body>
+</html>
