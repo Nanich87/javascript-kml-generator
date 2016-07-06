@@ -1,4 +1,4 @@
 JavaScript-KML-Generator
 ========================
 
-Генериране на KML файл от точки за Google Earth
+Convert space delimited point data (point_id latitude longitude) to KML format for Google Earth
